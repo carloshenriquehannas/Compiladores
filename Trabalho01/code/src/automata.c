@@ -1,27 +1,29 @@
-#include <stdio.h>
 #include <stdlib.h>
+#include<stdio.h>
 #include<ctype.h>
 
 #include "../headers/automata.h"
 
+	
 // Função para criar a tabela de transições
 int** transition_table(int _numStates, int _numChars) {
+
     // Aloca a matriz dinamicamente
-    int **token = (int **)malloc(_numStates * sizeof(int *));
+    int **token = (int **)malloc(NUM_STATES * sizeof(int *));
     int i, j;  // Declarando as variáveis i e j fora dos loops
-    for (i = 0; i < _numStates; i++) {
-        token[i] = (int *)malloc(_numChars * sizeof(int));
+    for (i = 0; i < NUM_STATES; i++) {
+        token[i] = (int *)malloc(MAX_CHAR_VAL * sizeof(int));
     }
 
     // Inicializa a matriz
-    for (i = 0; i < _numStates; i++) {
-        for (j = 0; j < _numChars; j++) {
+    for (i = 0; i < NUM_STATES; i++) {
+        for (j = 0; j < MAX_CHAR_VAL; j++) {
         	token[i][j] = -1;
         }
     }
 
     // define algumas transicoes mais gerais
-    for (i = 0; i < _numStates; i++) {
+    for (i = 0; i < MAX_CHAR_VAL; i++) {
 	// define transicoes para inteiros
 	if(isalpha(i)){
 		// leitura de caracteres em q0 e q2	
@@ -37,6 +39,7 @@ int** transition_table(int _numStates, int _numChars) {
 		token[q2][i] = q3;
 		token[q4][i] = q5;
 	}
+
 	// atribuicao do outro em q1, q14, q18 e q21
 	token[q1][i] = q1;
 	token[q14][i] = q15;
@@ -58,12 +61,13 @@ int** transition_table(int _numStates, int _numChars) {
     token[q0][47] = q8;   // '/'
     token[q0][9] = q0;    // '\t'
     token[q0][59] = q12;  // ';'
+    token[q0][58] = q21;  // ':'
     token[q0][46] = q6;  // '.'
     token[q0][44] = q7;  // ','
     token[q0][48] = q5;  // '0'
 
     // Para q1
-    token[q0][125] = q0;  // '}'
+    token[q1][125] = q0;  // '}'
 
     // Para q14
     token[q14][61] = q16; // '='
@@ -73,20 +77,42 @@ int** transition_table(int _numStates, int _numChars) {
     token[q18][61] = q19; // '='
 
     // Para q21
-    token[q21][61] = q23; // '='
+    token[q21][61] = q22; // '='
 
     return token;
 }
 
-int *valid_chars(){
-	int *list = malloc(sizeof(char)*MAX_CHAR_VAL);
-	for(int i = 0; i < 128; i++){
+void free_table(int **table){
+	for(int i = 0; i < NUM_STATES; i++){
+		free(table[i]);
 	}
+	free(table);
 }
 
-void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, int **tTable){
-		
 
+void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, int **tTable){
+		if(_nextChar > 127){
+			// erro -> caractere invalido
+			// como o caractere 0 eh sempre invalido, todas as transicoes funcionarao da mesma forma
+			// i.e., ele nao afetara o reconhecimento de uma cadeia e ainda sera detectado como um caractere invalido
+			*_state = tTable[*_state][0];
+		} else {
+	
+			*_state = tTable[*_state][(int)_nextChar];	
+
+			// verifica se o caractere eh comentario/char nao imprimivel
+			if(*_state == q1  || !isprint(_nextChar)|| _nextChar == ' ' || _nextChar == '}' || _nextChar == '{'){
+				if(_nextChar == '\n'){
+				       	(*_numLines)++;
+				}
+				return;
+			}
+			
+			_nextToken[*_tokenSize] = _nextChar;
+			(*_tokenSize)++;
+
+			return;
+		}
 }
 
 

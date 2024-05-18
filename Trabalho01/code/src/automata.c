@@ -4,21 +4,22 @@
 
 #include "../headers/automata.h"
 
-	
 // Função para criar a tabela de transições
-int** transition_table(int _numStates, int _numChars) {
+Transition** transition_table(int _numStates, int _numChars) {
 
     // Aloca a matriz dinamicamente
-    int **token = (int **)malloc(NUM_STATES * sizeof(int *));
+    Transition **token = (Transition **)malloc(NUM_STATES * sizeof(Transition *));
     int i, j;  // Declarando as variáveis i e j fora dos loops
     for (i = 0; i < NUM_STATES; i++) {
-        token[i] = (int *)malloc(MAX_CHAR_VAL * sizeof(int));
+        token[i] = (Transition *)malloc(MAX_CHAR_VAL * sizeof(Transition));
     }
 
     // Inicializa a matriz
     for (i = 0; i < NUM_STATES; i++) {
         for (j = 0; j < MAX_CHAR_VAL; j++) {
-        	token[i][j] = -1;
+		// por definicao, todos os estados sao invalidos e todas as transicoes sao imprimiveis
+        	token[i][j].state = -1;
+		token[i][j].printable = 1;
         }
     }
 
@@ -27,62 +28,73 @@ int** transition_table(int _numStates, int _numChars) {
 	// define transicoes para inteiros
 	if(isalpha(i)){
 		// leitura de caracteres em q0 e q2	
-		token[q0][i] = q2;
-		token[q2][i] = q2;
+		token[q0][i].state = q2;
+		token[q2][i].state = q2;
 	} else if(isdigit(i)){
 		// leituras de digitos em q0, q2 e q4
-		token[q0][i] = q4;
-    		token[q2][i] = q2;
-		token[q4][i] = q4;
+		token[q0][i].state = q4;
+    		token[q2][i].state = q2;
+		token[q4][i].state = q4;
 	} else {
 		// atribuicao do 'outro' em q2 e q4
-		token[q2][i] = q3;
-		token[q4][i] = q5;
+		token[q2][i].state = q3;
+		token[q2][i].printable = 0;
+		token[q4][i].state = q5;
+		token[q4][i].printable = 0;
 	}
 
 	// atribuicao do outro em q1, q14, q18 e q21
-	token[q1][i] = q1;
-	token[q14][i] = q15;
-	token[q18][i] = q20;
-	token[q21][i] = q23;
+	token[q1][i].state = q1;
+	token[q1][i].printable = 0;
+	token[q14][i].state = q15;
+	token[q14][i].printable = 0;
+	token[q18][i].state = q20;
+	token[q18][i].printable = 0;
+	token[q21][i].state = q23;
+	token[q21][i].printable = 0;
     }
 
     // Transicoes especificas
 
     // Para q0
-    token[q0][43] = q10;  // '+'
-    token[q0][45] = q11;  // '-'
-    token[q0][32] = q0;   // ' '
-    token[q0][60] = q14;  // '<'
-    token[q0][62] = q18;  // '>'
-    token[q0][61] = q13;  // '='
-    token[q0][123] = q1;  // '{'
-    token[q0][10] = q0;   // '\n'
-    token[q0][47] = q8;   // '/'
-    token[q0][9] = q0;    // '\t'
-    token[q0][59] = q12;  // ';'
-    token[q0][58] = q21;  // ':'
-    token[q0][46] = q6;  // '.'
-    token[q0][44] = q7;  // ','
-    token[q0][48] = q5;  // '0'
+    token[q0][43].state = q10;  // '+'
+    token[q0][45].state = q11;  // '-'
+    token[q0][32].state = q0;   // ' '
+    token[q0][60].state = q14;  // '<'
+    token[q0][62].state = q18;  // '>'
+    token[q0][61].state = q13;  // '='
+    token[q0][123].state = q1;  // '{'
+    token[q0][10].state = q0;   // '\n'
+    token[q0][47].state = q8;   // '/'
+    token[q0][9].state = q0;    // '\t'
+    token[q0][59].state = q12;  // ';'
+    token[q0][58].state = q21;  // ':'
+    token[q0][46].state = q6;  // '.'
+    token[q0][44].state = q7;  // ','
+    token[q0][48].state = q5;  // '0'
 
     // Para q1
-    token[q1][125] = q0;  // '}'
+    token[q1][125].state = q0;  // '}'
 
+    // Para esses ultimos, define tambem as transicoes imprimiveis
     // Para q14
-    token[q14][61] = q16; // '='
-    token[q14][62] = q17;  // '>'
+    token[q14][61].state = q16; // '='
+    token[q14][61].printable = 1; // '='
+    token[q14][62].state = q17;  // '>'
+    token[q14][62].printable = 1;  // '>'
 
     // Para q18
-    token[q18][61] = q19; // '='
+    token[q18][61].state = q19; // '='
+    token[q18][61].printable = 1; // '='
 
     // Para q21
-    token[q21][61] = q22; // '='
+    token[q21][61].state = q22; // '='
+    token[q21][61].printable = 1; // '='
 
     return token;
 }
 
-void free_table(int **table){
+void free_table(Transition **table){
 	for(int i = 0; i < NUM_STATES; i++){
 		free(table[i]);
 	}
@@ -90,18 +102,19 @@ void free_table(int **table){
 }
 
 
-void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, int **tTable){
+void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, Transition **tTable){
 		if(_nextChar > 127){
 			// erro -> caractere invalido
 			// como o caractere 0 eh sempre invalido, todas as transicoes funcionarao da mesma forma
 			// i.e., ele nao afetara o reconhecimento de uma cadeia e ainda sera detectado como um caractere invalido
-			*_state = tTable[*_state][0];
+			*_state = tTable[*_state][0].state;
 		} else {
+			int _pastState = *_state;
 	
-			*_state = tTable[*_state][(int)_nextChar];	
+			*_state = tTable[*_state][(int)_nextChar].state;	
 
 			// verifica se o caractere eh comentario/char nao imprimivel
-			if(*_state == q1  || !isprint(_nextChar)|| _nextChar == ' ' || _nextChar == '}' || _nextChar == '{'){
+			if(!tTable[_pastState][(int)_nextChar].printable  || !isprint(_nextChar)|| _nextChar == ' ' || _nextChar == '}' || _nextChar == '{'){
 				if(_nextChar == '\n'){
 				       	(*_numLines)++;
 				}

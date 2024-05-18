@@ -3,6 +3,7 @@
 
 #include "../headers/automata.h"
 #include "../headers/tokenization.h"
+#include "../headers/hash.h"
 
 
 const int _finalStates[24] = {0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,0,1,1};
@@ -12,7 +13,7 @@ const int _finalStates[24] = {0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,0,1,1};
 //
 // _nextToken e _tokenType tem tamanhos predefinidos e retornam as informacoes da cadeia reconhecida
 //
-int tokenization(FILE *_fd, char *_nextToken, char *_tokenType, int **tTable, int *_numLines){
+int tokenization(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable, Node **hTable, int *_numLines){
 	int _state = q0;
 	char _nextChar = 0;
 	
@@ -42,7 +43,7 @@ int tokenization(FILE *_fd, char *_nextToken, char *_tokenType, int **tTable, in
 	if(_finalStates[_state]){
 		// acao do estado final
 		_nextToken[_tokenSize++] = '\0';
-		state_action(_state, _nextToken, _tokenSize, _tokenType, _fd);
+		state_action(_state, _nextToken, _tokenSize, _tokenType, _fd, hTable);
 		return 1;
 	} else if(_state == q0){
 		// sucesso -> arquivo inteiro foi lido com sucesso
@@ -53,12 +54,19 @@ int tokenization(FILE *_fd, char *_nextToken, char *_tokenType, int **tTable, in
 	}
 }
 
-void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType, FILE *_fd){
+void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType, FILE *_fd, Node **hTable){
 	switch(_state){
 		// reconheceu um id
 		case q3:
 			_nextToken[_tokenSize - 1] = '\0';
-			strcpy(_tokenType,"id");
+			
+			// busca se a palavra eh reservada
+			if(search(hTable, _nextToken)){
+				strcpy(_tokenType,_nextToken);
+			} else {
+				strcpy(_tokenType,"id");
+			}
+			// corrige o cursor do arquivo -> caractere lookahead
 			fseek(_fd, -1,SEEK_CUR);
 			break;
 
@@ -66,6 +74,7 @@ void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType
 		case q5:
 			if(_tokenSize > 1) _nextToken[_tokenSize - 1] = '\0';
 			strcpy(_tokenType,"int");
+			// corrige o cursor do arquivo -> caractere lookahead
 			fseek(_fd, -1,SEEK_CUR);
 			break;
 
@@ -113,6 +122,8 @@ void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType
 		case q15:
 			_nextToken[_tokenSize - 1] = '\0';
 			strcpy(_tokenType,"simb_men");
+
+			// corrige o cursor do arquivo -> caractere lookahead
 			fseek(_fd, -1,SEEK_CUR);
 			break;
 		
@@ -135,6 +146,8 @@ void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType
 		case q20:
 			_nextToken[_tokenSize - 1] = '\0';
 			strcpy(_tokenType,"simb_mai");
+
+			// corrige o cursor do arquivo -> caractere lookahead
 			fseek(_fd, -1,SEEK_CUR);
 			break;
 		
@@ -147,6 +160,8 @@ void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType
 		case q23:
 			_nextToken[_tokenSize - 1] = '\0';
 			strcpy(_tokenType,"erro_simb_estranho");
+
+			// corrige o cursor do arquivo -> caractere lookahead
 			fseek(_fd, -1,SEEK_CUR);
 			break;
 	}

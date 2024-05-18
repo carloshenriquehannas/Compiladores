@@ -1,6 +1,7 @@
 #ifndef __AUTOMATA_H__
 #define __AUTOMATA_H__
 
+
 #define MAX_CHAR_VAL 128
 #define MAX_TOKEN_SIZE 62
 #define NUM_STATES 24
@@ -10,13 +11,20 @@ enum estados_automatos {
     q14, q15, q16, q17, q18, q19, q20, q21, q22, q23, q24, q25, q26
 };
 
+// Representacao de uma transicao
+// Contem o proximo estado e se essa transicao eh imprimivel ou nao
+typedef struct {
+	int state;
+	char printable;
+} Transition;
+
 // Funcao para criar a tabela de transicoes
-int** transition_table(int _numStates, int _numChars);
+Transition** transition_table(int _numStates, int _numChars);
 
 // Libera a tabela
-void free_table(int **table);
+void free_table(Transition **table);
 
 // Funcao para fazer as transicoes entre estados
-void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, int **tTable);
+void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, Transition **tTable);
 
 #endif 

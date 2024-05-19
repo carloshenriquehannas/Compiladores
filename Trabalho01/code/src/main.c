@@ -8,12 +8,11 @@
 
 
 int main(int argc, char *argv[]){
-	/*
+	
 	if(argv[1] == NULL){
 		printf("\nErro: entrada incorreta.\nO arquivo deve ser executado da forma:\n./tokenizer (nome_do_arquivo)\n\n");
 		exit(-1);
 	}
-	*/
 
 	Transition **tTable = transition_table(NUM_STATES, MAX_CHAR_VAL);
 
@@ -25,8 +24,7 @@ int main(int argc, char *argv[]){
 
 	// Abre os arquivos a serem utilizados
 
-	//FILE *_fileIn = fopen(argv[1], "r");
-	FILE *_fileIn = fopen("teste.txt", "r");
+	FILE *_fileIn = fopen(argv[1], "r");
 	if(_fileIn == NULL){
 		printf("\nErro na abertura do arquivo.\nCertifique-se de que o arquivo se encontra no diretirio.\n");
 		fclose(_fileIn);

@@ -74,8 +74,8 @@ void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType
 		case q5:
 			if(_tokenSize > 1) _nextToken[_tokenSize - 1] = '\0';
 			strcpy(_tokenType,"int");
-			// corrige o cursor do arquivo -> caractere lookahead
-			fseek(_fd, -1,SEEK_CUR);
+			// corrige o cursor do arquivo -> caractere lookahead (com excecao do zero)
+			if(strlen(_nextToken) > 1) fseek(_fd, -1,SEEK_CUR);
 			break;
 
 		// reconheceu '.'

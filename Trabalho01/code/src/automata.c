@@ -4,12 +4,12 @@
 
 #include "../headers/automata.h"
 
-// Função para criar a tabela de transições
+// Funcao para criar a tabela de transicoees
 Transition** transition_table(int _numStates, int _numChars) {
 
     // Aloca a matriz dinamicamente
     Transition **token = (Transition **)malloc(NUM_STATES * sizeof(Transition *));
-    int i, j;  // Declarando as variáveis i e j fora dos loops
+    int i, j;  // Declarando as variaveis i e j fora dos loops
     for (i = 0; i < NUM_STATES; i++) {
         token[i] = (Transition *)malloc(MAX_CHAR_VAL * sizeof(Transition));
     }

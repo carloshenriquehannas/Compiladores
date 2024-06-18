@@ -11,7 +11,17 @@
 			<x>277.0</x>&#13;
 			<y>137.0</y>&#13;
 		</state>&#13;
+		<state id="2" name="q2">&#13;
+			<x>377.0</x>&#13;
+			<y>137.0</y>&#13;
+			<final/>&#13;
+		</state>&#13;
 		<!--The list of transitions.-->&#13;
+		<transition>&#13;
+			<from>1</from>&#13;
+			<to>2</to>&#13;
+			<read>\n</read>&#13;
+		</transition>&#13;
 		<transition>&#13;
 			<from>0</from>&#13;
 			<to>1</to>&#13;

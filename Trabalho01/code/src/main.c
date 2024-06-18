@@ -8,11 +8,12 @@
 
 
 int main(int argc, char *argv[]){
-	
+
 	if(argv[1] == NULL){
 		printf("\nErro: entrada incorreta.\nO arquivo deve ser executado da forma:\n./tokenizer (nome_do_arquivo)\n\n");
 		exit(-1);
 	}
+
 
 	Transition **tTable = transition_table(NUM_STATES, MAX_CHAR_VAL);
 
@@ -35,7 +36,7 @@ int main(int argc, char *argv[]){
 		printf("\nErro na abertura do arquivo de escrita.\nTente novamente.\n");
 		fclose(_fileOut);
 		exit(-1);
-	}
+		}
 
 
 	// Simulacao da chamada da analise lexica
@@ -45,7 +46,7 @@ int main(int argc, char *argv[]){
 		switch(_ret){
 			case -1:
 				fputs("ERRO: fim inesperado de arquivo\n",_fileOut); 
-				printf("\nErro: o arquivo foi terminado inseperadamente.\n");	
+				printf("\nErro: o arquivo foi terminado inesperadamente.\n");	
 
 				free_table(tTable);
 				free_htable(hTable);

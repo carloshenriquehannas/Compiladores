@@ -31,16 +31,22 @@ Transition** transition_table(int _numStates, int _numChars) {
 		token[q0][i].state = q2;
 		token[q2][i].state = q2;
 	} else if(isdigit(i)){
-		// leituras de digitos em q0, q2 e q4
+		// leituras de digitos em q0, q2, q4 e q27
 		token[q0][i].state = q4;
     		token[q2][i].state = q2;
 		token[q4][i].state = q4;
+		token[q26][i].state = q27;
+		token[q27][i].state = q27;
 	} else {
 		// atribuicao do 'outro' em q2 e q4
 		token[q2][i].state = q3;
 		token[q2][i].printable = 0;
 		token[q4][i].state = q5;
 		token[q4][i].printable = 0;
+		token[q26][i].state = q29;
+		token[q26][i].printable = 0;
+		token[q27][i].state = q28;
+		token[q27][i].printable = 0;
 	}
 
 	// atribuicao do outro em q1, q14, q18 e q21
@@ -52,6 +58,10 @@ Transition** transition_table(int _numStates, int _numChars) {
 	token[q18][i].printable = 0;
 	token[q21][i].state = q23;
 	token[q21][i].printable = 0;
+	token[q24][i].state = q24;
+	token[q24][i].printable = 0;
+	token[q25][i].state = q5;
+	token[q25][i].printable = 0;
     }
 
     // Transicoes especificas
@@ -71,12 +81,17 @@ Transition** transition_table(int _numStates, int _numChars) {
     token[q0][58].state = q21;  // ':'
     token[q0][46].state = q6;  // '.'
     token[q0][44].state = q7;  // ','
-    token[q0][48].state = q5;  // '0'
+    token[q0][48].state = q25;  // '0'
 
     // Para q1
+    token[q1][10].state = q24;
     token[q1][125].state = q0;  // '}'
 
     // Para esses ultimos, define tambem as transicoes imprimiveis
+    // Para q4
+    token[q4][46].state = q26; // '.'
+    token[q4][46].printable = 1; // '.'
+
     // Para q14
     token[q14][61].state = q16; // '='
     token[q14][61].printable = 1; // '='
@@ -90,6 +105,10 @@ Transition** transition_table(int _numStates, int _numChars) {
     // Para q21
     token[q21][61].state = q22; // '='
     token[q21][61].printable = 1; // '='
+				  
+    // Para q25
+    token[q25][46].state = q26; // '.'
+    token[q25][46].printable = 1; // '.'
 
     return token;
 }
@@ -103,7 +122,7 @@ void free_table(Transition **table){
 
 
 void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, int *_numLines, Transition **tTable){
-		if(_nextChar > 127){
+		if(_nextChar > 127 || _nextChar < 0){
 			// erro -> caractere invalido
 			// como o caractere 0 eh sempre invalido, todas as transicoes funcionarao da mesma forma
 			// i.e., ele nao afetara o reconhecimento de uma cadeia e ainda sera detectado como um caractere invalido
@@ -127,24 +146,6 @@ void transition(int *_state, char _nextChar, char *_nextToken,int *_tokenSize, i
 			return;
 		}
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

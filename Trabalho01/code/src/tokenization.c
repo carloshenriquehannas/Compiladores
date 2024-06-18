@@ -6,7 +6,7 @@
 #include "../headers/hash.h"
 
 
-const int _finalStates[24] = {0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,0,1,1};
+const int _finalStates[30] = {0,0,0,1,0,1,1,1,1,1,1,1,1,1,0,1,1,1,0,1,1,0,1,1,0,0,0,0,1,1};
 
 
 // Processo de tokenizacao
@@ -164,5 +164,22 @@ void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType
 			// corrige o cursor do arquivo -> caractere lookahead
 			fseek(_fd, -1,SEEK_CUR);
 			break;
+		
+		// reconheceu numero real -> erro
+		case q28:
+			if(_tokenSize > 1) _nextToken[_tokenSize - 1] = '\0';
+			strcpy(_tokenType,"erro_num_real");
+			// corrige o cursor do arquivo -> caractere lookahead 
+			fseek(_fd, -1,SEEK_CUR);
+			break;
+
+		// reconheceu numero real mal formatado -> erro
+		case q29:
+			if(_tokenSize > 1) _nextToken[_tokenSize - 1] = '\0';
+			strcpy(_tokenType,"err_real_mal_format");
+			// corrige o cursor do arquivo -> caractere lookahead 
+			fseek(_fd, -1,SEEK_CUR);
+			break;
+
 	}
 }	

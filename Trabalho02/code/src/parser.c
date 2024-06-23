@@ -237,8 +237,8 @@ void prim_comando(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tT
 			fprintf(_fout,"\n");
 			if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, COMANDO, -1, NULL))return;
 		}
-	} else {
-			fprintf(_fout,"Erro sintatico na linha %d: ", last_correct_line);
+	} else if(search(fiTable[COMANDO],_tokenType)){
+			fprintf(_fout,"Erro sintatico na linha %d: ", (last_correct_line+1));
 			fprintf(_fout, "a seção de comandos deve ser iniciada pela estrutura BEGIN ... END. Se você não estava escrevendo um comando, certifique-se de que os delimitadores das regiões de declaração estão corretos (VAR, CONST, PROCEDURE)");
 			fprintf(_fout,"\n");
 			if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, COMANDO, -1, NULL))return;

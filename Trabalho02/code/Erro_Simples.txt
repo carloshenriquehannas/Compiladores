@@ -1,8 +1,0 @@
-VAR a,b,c
-
-BEGAN
-	a:= 1;
-	IF a>1
-	   b:=4;
-	c:=@@
-END.	

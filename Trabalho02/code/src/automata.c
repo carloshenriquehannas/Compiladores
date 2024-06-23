@@ -38,7 +38,6 @@ Transition** transition_table(int _numStates, int _numChars) {
 		token[q6][i].state = q27;
 		token[q26][i].state = q27;
 		token[q27][i].state = q27;
-		token[q33][i].state = q33;
 
     	} else {
 		// atribuicao do 'outro' em q2 e q4
@@ -52,8 +51,6 @@ Transition** transition_table(int _numStates, int _numChars) {
 		token[q26][i].printable = 0;
 		token[q27][i].state = q28;
 		token[q27][i].printable = 0;
-		token[q33][i].state = q29;
-		token[q33][i].printable = 0;
 	}
 
 
@@ -84,6 +81,7 @@ Transition** transition_table(int _numStates, int _numChars) {
     token[q0][123].state = q1;  // '{'
     token[q0][10].state = q0;   // '\n'
     token[q0][47].state = q8;   // '/'
+    token[q0][42].state = q9;   // '/'
     token[q0][9].state = q0;    // '\t'
     token[q0][13].state = q0;   // '\r'
     token[q0][59].state = q12;  // ';'
@@ -102,8 +100,6 @@ Transition** transition_table(int _numStates, int _numChars) {
     // Para q4
     token[q4][46].state = q26; // '.'
     token[q4][46].printable = 1; // '.'
-    token[q4][44].state = q33;  // ','
-    token[q4][44].printable = 1; // ','
 
     // Para q14
     token[q14][61].state = q16; // '='
@@ -122,8 +118,6 @@ Transition** transition_table(int _numStates, int _numChars) {
     // Para q25
     token[q25][46].state = q26; // '.'
     token[q25][46].printable = 1; // '.'
-    token[q25][44].state = q33;  // ','
-    token[q25][44].printable = 1; // ','
 
 
     return token;

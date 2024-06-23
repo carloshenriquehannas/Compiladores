@@ -1,7 +1,18 @@
-VAR a,b,c
+CONST alfa=1,beta=5;
+
+VAR a,b,c;
+
+PROCEDURE meuproc;
+VAR x,y;
 BEGIN
-	a:=2;
-	IF a>2
-		b:=3;
-	c:=@+b
+	x:=5;
+	WHILE x>0 DO
+		y:=y+alfa*4+beta;
+		x:=x-1;
+END;
+
+BEGIN
+	IF claudinho <> (bochecha> THEN
+		cleitinho:=2*banana;
+	CALL meuproc;
 END.

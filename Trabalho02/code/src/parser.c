@@ -37,7 +37,7 @@ void parser(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable, 
 		last_correct_line = *_numLines;
 		tokenization(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);
 	} else {
-		if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, BLOCO, -1, "simb_pv")){
+		if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, -1, -1, "simb_pf")){
 			fprintf(_fout,"Erro sintatico na linha %d: ", last_correct_line);
 			fprintf(_fout, "o arquivo terminou inesperadamente, faltando simbolo de fim do programa");
 			fprintf(_fout,"\n");
@@ -221,7 +221,7 @@ void procedimento(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tT
 void prim_comando(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable, Node **hTable, int *_numLines, FILE *_fout, Node ***foTable, Node ***fiTable){
 	// regras do primeiro comando
 	if(!strcmp(_tokenType, "BEGIN")){
-		last_correct_line = *_numLines;
+		last_correct_line = *_numLines + 1;
 		tokenization(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);
 
 		comando(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);
@@ -233,7 +233,7 @@ void prim_comando(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tT
 			tokenization(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);
 		} else {
 			fprintf(_fout,"Erro sintatico na linha %d: ", last_correct_line);
-			fprintf(_fout, "identificador faltando");
+			fprintf(_fout, "não foi possível detectar o fim do bloco. Por favor, reveja a sintaxe do bloco ou verifique se não falta uma diretiva 'END'");
 			fprintf(_fout,"\n");
 			if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, COMANDO, -1, NULL))return;
 		}
@@ -299,7 +299,7 @@ void comando(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable,
 		}
 
 	} else if(!strcmp(_tokenType, "BEGIN")){
-		last_correct_line = *_numLines;
+		last_correct_line = *_numLines+1;
 		tokenization(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);
 
 		comando(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);
@@ -329,7 +329,7 @@ void comando(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable,
 			fprintf(_fout,"Erro sintatico na linha %d: ", last_correct_line);
 			fprintf(_fout, "comando 'THEN' faltando");
 			fprintf(_fout,"\n");
-			if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, COMANDO, COMANDO, NULL))return;
+			if(error(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable, -1, COMANDO, NULL))return;
 		}
 
 		comando(_fd, _nextToken, _tokenType, tTable, hTable, _numLines, _fout, foTable, fiTable);

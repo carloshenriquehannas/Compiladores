@@ -1,18 +1,19 @@
-CONST alfa=1,beta=5;
+CONST alfa,beta=5;
 
-VAR a,b,c;
+VAR a,b,c
 
+{COMENTÁRIO COM ACENTUAÇÃO}
 PROCEDURE meuproc;
-VAR x,y;
+VAR x,y
 BEGIN
-	x:=5;
-	WHILE x>0 DO
+	x:=5.5;
+	WHILE x>0 
 		y:=y+alfa*4+beta;
-		x:=x-1;
+		x:=x-1
 END;
 
 BEGIN
 	IF claudinho <> (bochecha> THEN
-		cleitinho:=2*banana;
-	CALL meuproc;
+		cleitinho:=2*banana
+	CALL meuproc
 END.

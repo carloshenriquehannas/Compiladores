@@ -8,9 +8,9 @@
 #define MAX_TOKEN_SIZE 62
 
 // Funcao que coordena a analise lexica
-int tokenization(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable, Node **hTable, int *_numLines);
+int tokenization(FILE *_fd, char *_nextToken, char *_tokenType, Transition **tTable, Node **hTable, int *_numLines, FILE *_fout, Node ***foTable, Node ***fiTable);
 
 // Acoes tomadas pelos estados finais
-void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType, FILE *_fd, Node **hTable);
+void state_action(int _state, char *_nextToken, int _tokenSize, char *_tokenType, FILE *_fd, Node **hTable, char _nextChar, int *_numLines, FILE *_fout);
 
 #endif

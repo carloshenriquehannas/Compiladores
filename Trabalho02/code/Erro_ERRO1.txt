@@ -1,0 +1,11 @@
+VAR a,b, c
+
+
+BEGIN
+END.
+
+	a:== 15;
+	IF IF a>1;
+	   b:=4;
+	
+	

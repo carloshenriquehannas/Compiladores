@@ -1,0 +1,9 @@
+VAR a, e, f
+
+BEGIN
+
+	a:=5;
+	IF a/0 > 1
+		b:=2;
+
+END.

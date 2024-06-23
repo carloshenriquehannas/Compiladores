@@ -1,0 +1,9 @@
+VAR a,b, c
+VAR a, d, e
+
+BEGIN
+	a:= 15
+	IF a>1;
+	   b:=4;
+	c:=@@
+END.	

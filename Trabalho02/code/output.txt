@@ -1,0 +1,2 @@
+Erro sintatico na linha 1: a seção de comandos deve ser iniciada pela estrutura BEGIN ... END. Se você não estava escrevendo um comando, certifique-se de que os delimitadores das regiões de declaração estão corretos (VAR, CONST, PROCEDURE)
+Erro sintatico na linha 1: o arquivo terminou inesperadamente, faltando simbolo de fim do programa

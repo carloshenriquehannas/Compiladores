@@ -1,0 +1,17 @@
+CONST,VAR,PROCEDURE,BEGIN,CALL,IF,WHILE,id,simb_pf
+CONST,VAR,PROCEDURE,BEGIN,CALL,IF,WHILE,id
+CONST,VAR,PROCEDURE
+CONST
+simb_virg
+VAR
+simb_virg
+PROCEDURE
+id,CALL,BEGIN,IF,WHILE
+simb_pv
+simb_sub,simb_add,id,int,simb_ap
+id,int,simb_ap
+simb_add,simb_sub
+id,int,simb_ap
+simb_mult,simb_div
+ODD,simb_sub,simb_add,id,int,simb_ap
+simb_eq,simb_diff,simb_men,simb_meneq,simb_mai,simb_maieq

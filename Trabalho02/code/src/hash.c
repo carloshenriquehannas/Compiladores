@@ -19,6 +19,7 @@ unsigned long hash(char *str) {
     return hash % TABLE_SIZE;
 }
 
+
 //Inicializacao da tabela hash
 Node **init_table() {
     Node **table = (Node **)malloc(TABLE_SIZE * sizeof(Node *));
@@ -26,10 +27,70 @@ Node **init_table() {
         table[i] = NULL;
     }
 
-    //Insere a palavra servada na tabela hash
+    //Insere a palavra reservada na tabela hash
     for (int i = 0; i < sizeof(key_word) / sizeof(key_word[0]); i++) {
         insert(table, key_word[i]);
     }
+
+    return table;
+}
+
+// Cria a lista de seguidores de cada nao terminal
+Node ***init_followers(){
+    Node ***table = (Node ***)malloc(17 * sizeof(Node **));
+    for(int i = 0; i < 17; i++){
+    	table[i] = (Node **)malloc(TABLE_SIZE * sizeof(Node *));
+    } 
+
+    FILE *file = fopen("./src/followers.csv", "r"); 
+
+    if (file == NULL) {
+        perror("Erro ao abrir o arquivo");
+	exit(-1);
+    }
+
+    char line[256];
+    int line_count = 0;
+
+    while(fgets(line, 256, file) != NULL){
+    	    char *token = strtok(line, ",");	    
+	    while(token){
+		insert(table[line_count],token);
+		token = strtok(NULL, ",");
+	    }
+	    line_count++;
+    }
+    fclose(file);
+
+    return table;
+}
+
+// Cria a lista de primeiros de cada nao terminal
+Node ***init_firsts(){
+    Node ***table = (Node ***)malloc(17 * sizeof(Node **));
+    for(int i = 0; i < 17; i++){
+    	table[i] = (Node **)malloc(TABLE_SIZE * sizeof(Node *));
+    } 
+
+    FILE *file = fopen("./src/firsts.csv", "r"); 
+
+    if (file == NULL) {
+        perror("Erro ao abrir o arquivo");
+	exit(-1);
+    }
+
+    char line[256];
+    int line_count = 0;
+
+    while(fgets(line, 256, file) != NULL){
+    	    char *token = strtok(line, ",");	    
+	    while(token){
+		insert(table[line_count],token);
+		token = strtok(NULL, ",");
+	    }
+	    line_count++;
+    }
+    fclose(file);
 
     return table;
 }
@@ -42,6 +103,7 @@ void insert(Node **table, char *word) {
     new_node->next = table[index];
     table[index] = new_node;
 }
+
 
 //Verifica se uma palavra esta na tabela hash
 int search(Node **table, char *word) {
@@ -63,7 +125,6 @@ void free_htable(Node **table) {
         while (current != NULL) {
             Node *temp = current;
             current = current->next;
-            free(temp->word);
             free(temp);
         }
     }

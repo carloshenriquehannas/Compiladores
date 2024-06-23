@@ -13,11 +13,23 @@ typedef struct Node {
 //Função de hash 
 unsigned long hash(char *str);
 
+//Função de hash para a tabela de seguidores e primeiros 
+unsigned long hash2(char *str);
+
 //Inicializacao da tabela hash
 Node **init_table();
 
+//Inicializacao das tabelas de seguidores
+Node ***init_followers();
+
+//Inicializacao das tabelas de primeiros
+Node ***init_firsts();
+
 //Insere uma palavra na tabela hash
 void insert(Node **table, char *word);
+
+//Insere uma palavra na tabela de seguidores e primeiros
+void insert2(Node **table, char *word);
 
 //Verifica se uma palavra esta na tabela hash
 int search(Node **table, char *word);

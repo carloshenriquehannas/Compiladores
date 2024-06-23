@@ -11,7 +11,7 @@
 int main(int argc, char *argv[]){
 
 	if(argv[1] == NULL){
-		printf("\nErro: entrada incorreta.\nO arquivo deve ser executado da forma:\n./tokenizer (nome_do_arquivo)\n\n");
+		printf("\nErro: entrada incorreta.\nO arquivo deve ser executado da forma:\n./parser (nome_do_arquivo)\n\n");
 		exit(-1);
 	}
 
